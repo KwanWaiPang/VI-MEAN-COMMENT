@@ -1,0 +1,18 @@
+<launch>
+    <!--开启rviz  -->
+    <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find self_calibration_estimator)/config/sample.rviz" />
+
+    <!-- 输入单目image+imu进行feature tracking然后再根据tracking feature+imu求得psoe？ -->
+    <include file="$(find self_calibration_estimator)/launch/mapping/sample.launch"/>
+
+    <!-- 这应该是用于深度估计的 -->
+    <!-- <include file="$(find stereo_mapper)/launch/sample.launch"/> -->
+
+    <!-- 进行TSDF-based map fusion -->
+    <!-- <include file="$(find chisel_ros)/launch/sample.launch"/> -->
+
+    <!-- 运行rosbag -->
+    <arg name="bag_name" value="/home/kwanwaipang/dataset/EVI-SAM/113005.bag"/>
+	  <node pkg="rosbag" type="play" name="rosbag" args="-r 1.0 --clock --pause $(arg bag_name)" launch-prefix="gnome-terminal -x"/>
+
+</launch>
